@@ -35,10 +35,10 @@ warnings.filterwarnings("ignore", module="skimage.io._io")
 
 def get_microscopy_collection(input_file):
     """Return microscopy collection from input file."""
-    data_dir = os.path.abspath(os.path.join(HERE, "..", "data"))
+    data_dir = "output"
     if not os.path.isdir(data_dir):
         os.mkdir(data_dir)
-    backend_dir = os.path.join(data_dir, 'unpacked')
+    backend_dir = os.path.join(data_dir, '.backend')
     file_backend = FileBackend(backend_dir)
     data_manager = DataManager(file_backend)
     microscopy_collection = data_manager.load(input_file)
