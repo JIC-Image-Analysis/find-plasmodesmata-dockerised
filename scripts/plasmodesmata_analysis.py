@@ -19,7 +19,7 @@ import numpy as np
 from jicbioimage.core.transform import transformation
 from jicbioimage.core.io import DataManager, FileBackend, AutoName, AutoWrite
 from jicbioimage.core.util.array import normalise
-from jicbioimage.core.util.color import pretty_color
+from jicbioimage.core.util.color import pretty_color_from_identifier
 from jicbioimage.segment import SegmentedImage, connected_components
 from jicbioimage.illustrate import AnnotatedImage
 
@@ -95,7 +95,7 @@ def annotate(image, segmentation):
     for i in segmentation.identifiers:
         region = segmentation.region_by_identifier(i)
         annotation.mask_region(region.dilate(1).border,
-                               color=pretty_color(i))
+                               color=pretty_color_from_identifier(i))
     return annotation
 
 
@@ -120,7 +120,7 @@ def write_csv(segmentation3D, intensity, fname):
         for i in segmentation3D.identifiers:
             region = segmentation3D.region_by_identifier(i)
             values = intensity[region]
-            data = dict(id=i, rgb=str(pretty_color(i)), voxels=region.area,
+            data = dict(id=i, rgb=str(pretty_color_from_identifier(i)), voxels=region.area,
                         sum=int(np.sum(values)), min=int(np.min(values)),
                         max=int(np.max(values)), mean=float(np.mean(values)))
             fh.write(row.format(**data))
