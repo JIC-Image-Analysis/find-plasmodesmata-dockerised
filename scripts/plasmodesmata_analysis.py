@@ -54,37 +54,25 @@ def threshold_abs(image, threshold):
 def segment3D(microscopy_collection, series, threshold):
     """Return segmented plasmodesmata in 3D."""
     zstack = microscopy_collection.zstack_array(s=series)
-    segmentation = np.zeros(zstack.shape, dtype=bool)
-    ziterator = microscopy_collection.zstack_proxy_iterator(s=series)
-    for z, proxy_image in enumerate(ziterator):
-        image = proxy_image.image
-        image = threshold_abs(image, threshold)
-        segmentation[:, :, z] = image
+    segmentation = zstack > threshold
     return connected_components(segmentation, background=0)
 
 
-def filter_large(segmentation3D, max_voxel):
-    """Remove large regions."""
-    removed = segmentation3D.copy()
+def size_filter(segmentation3D, min_voxel, max_voxel):
+    """Remove small and large regions."""
+    small_removed = segmentation3D.copy()
+    large_removed = segmentation3D.copy()
     for i in segmentation3D.identifiers:
         region = segmentation3D.region_by_identifier(i)
         if region.area > max_voxel:
             segmentation3D[region] = 0
         else:
-            removed[region] = 0
-    return segmentation3D, removed
-
-
-def filter_small(segmentation3D, min_voxel):
-    """Remove small regions."""
-    removed = segmentation3D.copy()
-    for i in segmentation3D.identifiers:
-        region = segmentation3D.region_by_identifier(i)
+            large_removed[region] = 0
         if region.area < min_voxel:
             segmentation3D[region] = 0
         else:
-            removed[region] = 0
-    return segmentation3D, removed
+            small_removed[region] = 0
+    return segmentation3D, small_removed, large_removed
 
 
 @transformation
@@ -138,8 +126,7 @@ def plasmodesmata_analysis(microscopy_collection, series, threshold,
     segmentation = segment3D(microscopy_collection, series, threshold)
 
     # Filter out small and large regions.
-    segmentation, small_removed = filter_small(segmentation, min_voxel)
-    segmentation, large_removed = filter_large(segmentation, max_voxel)
+    segmentation, small_removed, large_removed = size_filter(segmentation, min_voxel, max_voxel)
 
     # Create annotated images.
     annotate3D(microscopy_collection, series, segmentation, "plasmodesmata")
