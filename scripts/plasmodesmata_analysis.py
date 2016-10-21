@@ -53,6 +53,15 @@ def get_microscopy_collection(input_file):
     return microscopy_collection
 
 
+def log_settings(version, args):
+    """Log settings used with running the script."""
+    logger.info("Script name: {}".format(os.path.basename(__file__)))
+    logger.info("Project version: {}".format(__version__))
+    logger.info("Threshold: {}".format(args.threshold))
+    logger.info("Min voxel: {}".format(args.min_voxel))
+    logger.info("Max voxel: {}".format(args.max_voxel))
+
+
 @transformation
 def threshold_abs(image, threshold):
     """Return thresholded image from an absolute cutoff."""
@@ -183,10 +192,7 @@ def main():
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
-    logger.info("Script version: {}".format(__version__))
-    logger.info("Threshold: {}".format(args.threshold))
-    logger.info("Min voxel: {}".format(args.min_voxel))
-    logger.info("Max voxel: {}".format(args.max_voxel))
+    log_settings(__version__, args)
 
     microscopy_collection = get_microscopy_collection(args.input_file)
     plasmodesmata_analysis(microscopy_collection, args.series, args.threshold,

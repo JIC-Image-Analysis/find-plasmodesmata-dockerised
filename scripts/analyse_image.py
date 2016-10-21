@@ -10,7 +10,8 @@ from jicbioimage.core.io import AutoName
 from plasmodesmata_analysis import (
     get_microscopy_collection,
     plasmodesmata_analysis,
-    __version__
+    __version__,
+    log_settings,
 )
 
 
@@ -68,10 +69,7 @@ def main():
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
-    logger.info("Script version: {}".format(__version__))
-    logger.info("Threshold: {}".format(args.threshold))
-    logger.info("Min voxel: {}".format(args.min_voxel))
-    logger.info("Max voxel: {}".format(args.max_voxel))
+    log_settings(__version__, args)
 
     microscopy_collection = get_microscopy_collection(args.input_file)
     analyse_all_series(microscopy_collection, specific_out_dir, args.threshold,
