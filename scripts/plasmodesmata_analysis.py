@@ -13,6 +13,7 @@ are filtered out based on a maximum allowed voxel size.
 import os.path
 import argparse
 import warnings
+import logging
 
 import numpy as np
 
@@ -28,6 +29,13 @@ __version__ = "0.8.0"
 
 AutoWrite.on = False
 HERE = os.path.dirname(os.path.realpath(__file__))
+
+# Setup logging with a stream handler.
+logger = logging.getLogger(os.path.basename(__file__))
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+logger.addHandler(ch)
 
 # Suppress spurious scikit-image warnings.
 warnings.filterwarnings("ignore", module="skimage.io._io")
@@ -166,6 +174,19 @@ def main():
     if not os.path.isdir(args.output_dir):
         os.mkdir(args.output_dir)
     AutoName.directory = args.output_dir
+
+    # Create file handle logger.
+    fh = logging.FileHandler(os.path.join(args.output_dir, "log"), mode="w")
+    fh.setLevel(logging.DEBUG)
+    format_ = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    formatter = logging.Formatter(format_)
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
+
+    logger.info("Script version: {}".format(__version__))
+    logger.info("Threshold: {}".format(args.threshold))
+    logger.info("Min voxel: {}".format(args.min_voxel))
+    logger.info("Max voxel: {}".format(args.max_voxel))
 
     microscopy_collection = get_microscopy_collection(args.input_file)
     plasmodesmata_analysis(microscopy_collection, args.series, args.threshold,
