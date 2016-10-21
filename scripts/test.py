@@ -22,7 +22,7 @@ def test_plasmodesmata_analysis():
         AutoName.directory = output_dir
 
         backend_dir = "/backend"
-        test_image = "/data/test.tif"
+        test_image = "/scripts/test_data/test.tif"
         file_backend = FileBackend(backend_dir)
         data_manager = DataManager(file_backend)
 
