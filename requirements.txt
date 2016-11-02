@@ -4,10 +4,10 @@ dask==0.9.0
 decorator==4.0.9
 iniparse==0.4
 javapackages==1.0.0
-jicbioimage.core==0.14.1
-jicbioimage.illustrate==0.6.0
+jicbioimage.core==0.15.0
+jicbioimage.illustrate==0.6.1
 jicbioimage.segment==0.4.0
-jicbioimage.transform==0.5.1
+jicbioimage.transform==0.6.0
 kitchen==1.1.1
 lxml==3.2.1
 matplotlib==1.5.1
