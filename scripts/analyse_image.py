@@ -69,7 +69,7 @@ def main():
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
-    log_settings(__version__, args)
+    log_settings(logger, __version__, args)
 
     microscopy_collection = get_microscopy_collection(args.input_file)
     analyse_all_series(microscopy_collection, specific_out_dir, args.threshold,

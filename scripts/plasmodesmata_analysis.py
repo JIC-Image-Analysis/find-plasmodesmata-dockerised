@@ -53,7 +53,7 @@ def get_microscopy_collection(input_file):
     return microscopy_collection
 
 
-def log_settings(version, args):
+def log_settings(logger, version, args):
     """Log settings used with running the script."""
     logger.info("Script name: {}".format(os.path.basename(__file__)))
     logger.info("Project version: {}".format(__version__))
@@ -192,7 +192,7 @@ def main():
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
-    log_settings(__version__, args)
+    log_settings(logger, __version__, args)
 
     microscopy_collection = get_microscopy_collection(args.input_file)
     plasmodesmata_analysis(microscopy_collection, args.series, args.threshold,

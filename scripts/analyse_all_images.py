@@ -70,7 +70,7 @@ def main():
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
-    log_settings(__version__, args)
+    log_settings(logger, __version__, args)
 
     analyse_dir(args)
 
