@@ -19,11 +19,18 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 logger.addHandler(ch)
 
+ALLOWED_FILE_EXTENSIONS = [
+    ".lif",
+    ".czi",
+    ".nd2",
+]
+
 
 def analyse_dir(args):
     """Analyse all images in an input directory."""
     for fname in os.listdir(args.input_dir):
-        if not fname.lower().endswith(".lif"):
+        _, ext = os.path.splitext(fname)
+        if ext not in ALLOWED_FILE_EXTENSIONS:
             continue
         logger.info("Analysing image: {}".format(fname))
 
